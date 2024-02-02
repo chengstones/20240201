@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 # 设置字体大小
 plt.rcParams['font.size'] = 20
+# 加粗图片边框
+plt.rcParams['axes.linewidth'] = 2
 
 data_path = r'Question\Wimbledon_featured_matches.csv'
 data = pd.read_csv(data_path)
@@ -18,53 +20,66 @@ def analyse_all_match(all_match):
     # 字典序
     player.sort()
     player2index = {name: i for i, name in enumerate(player)}
+    print(player2index)
     # 构建胜负矩阵
-    win_matrix = np.zeros((len(player), len(player)))
-    lose_matrix = np.zeros((len(player), len(player)))
+    win_matrix_serve_start = np.zeros((len(player), len(player)))
+    win_matrix_return_start = np.zeros((len(player), len(player)))
+    win_matrix_serve_after_win = np.zeros((len(player), len(player)))
+    win_matrix_return_after_win = np.zeros((len(player), len(player)))
+    win_matrix_serve_after_lose = np.zeros((len(player), len(player)))
+    win_matrix_return_after_lose = np.zeros((len(player), len(player)))
     # 遍历每场比赛
-    for row in all_match.iterrows():
-        # 获取比赛结果
-        row = row[1]
-        player1 = row['player1']
-        player2 = row['player2']
-        win_index = row['point_victor']
-        winner_index = player2index[player1] if win_index == 1 else player2index[player2]
-        loser_index = player2index[player1] if win_index == 2 else player2index[player2]
-        # 更新胜负矩阵
-        win_matrix[winner_index, loser_index] += 1
-        lose_matrix[loser_index, winner_index] += 1
-    return win_matrix, lose_matrix, player
-win_matrix, lose_matrix, player = analyse_all_match(data)
-
-def cal_likelihood(gamma, win_matrix, lose_matrix):
-    likelihood = 0
-    for i in range(len(player)):
-        for j in range(len(player)):
-            if i != j:
-                likelihood += win_matrix[i, j] * np.log(gamma[i] / (gamma[i] + gamma[j]))
-    return likelihood
-
-def Bradley_Terry(win_matrix, lose_matrix, player):
-    # 初始化参数
-    gamma = np.ones(len(player))
-    # 迭代次数
-    max_iter = 100
-    likelihood_list = []
-    # 迭代
-    for _ in range(max_iter):
-        # 更新参数
-        gamma_copy = gamma.copy()
-        for i in range(len(player)):
-            W = np.sum(win_matrix[i, :])
-            N = win_matrix[i, :] + lose_matrix[i, :]
-            gamma_sum = gamma[i] + gamma
-            sum_ = np.sum(N / gamma_sum)
-            gamma_copy[i] = W / sum_
-        gamma = gamma_copy
-        # 计算似然函数值
-        # likelihood = cal_likelihood(gamma, win_matrix, lose_matrix)
-        # likelihood_list.append(likelihood)
-    return gamma, likelihood_list
-
-gamma, likelihood_list = Bradley_Terry(win_matrix, lose_matrix, player)
-plt.plot(likelihood_list)
+    i = 0
+    groupby_match = all_match.groupby('match_id')
+    for match_id, match in groupby_match:
+        # 一场比赛的数据
+        player1 = match['player1'].values[0]
+        player2 = match['player2'].values[0]
+        groupby_set = match.groupby('set_no')
+        for set_no, one_set in groupby_set:
+            groupby_game = one_set.groupby('game_no')
+            pre_winner = 0
+            for point_no, one_point in groupby_game:
+                for index, point in one_point.iterrows():
+                    i += 1
+                    print(i)
+                    point_victor = point['point_victor']
+                    serve_flag = point['server']
+                    
+                    if pre_winner == 0:
+                        pre_winner = point_victor
+                        if serve_flag == 1:
+                            if point_victor == 1:
+                                win_matrix_serve_start[player2index[player1], player2index[player2]] += 1
+                            else:
+                                win_matrix_return_start[player2index[player2], player2index[player1]] += 1
+                        else:
+                            if point_victor == 1:
+                                win_matrix_return_start[player2index[player1], player2index[player2]] += 1
+                            else:
+                                win_matrix_serve_start[player2index[player2], player2index[player1]] += 1
+                        continue
+                    if pre_winner == 1:
+                        if serve_flag == 1:
+                            if point_victor == 1:
+                                win_matrix_serve_after_win[player2index[player1], player2index[player2]] += 1
+                            else:
+                                win_matrix_return_after_lose[player2index[player2], player2index[player1]] += 1
+                        else:
+                            if point_victor == 1:
+                                win_matrix_return_after_lose[player2index[player1], player2index[player2]] += 1
+                            else:
+                                win_matrix_serve_after_win[player2index[player2], player2index[player1]] += 1
+                    else:
+                        if serve_flag == 1:
+                            if point_victor == 1:
+                                win_matrix_serve_after_lose[player2index[player1], player2index[player2]] += 1
+                            else:
+                                win_matrix_return_after_win[player2index[player2], player2index[player1]] += 1
+                        else:
+                            if point_victor == 1:
+                                win_matrix_return_after_lose[player2index[player1], player2index[player2]] += 1
+                            else:
+                                win_matrix_serve_after_win[player2index[player2], player2index[player1]] += 1
+    return win_matrix_serve_start, win_matrix_return_start, win_matrix_serve_after_win, win_matrix_return_after_win, win_matrix_serve_after_lose, win_matrix_return_after_lose, player
+win_matrix_serve_start, win_matrix_return_start, win_matrix_serve_after_win, win_matrix_return_after_win, win_matrix_serve_after_lose, win_matrix_return_after_lose, player = analyse_all_match(data)
