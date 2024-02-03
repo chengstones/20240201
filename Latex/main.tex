@@ -92,21 +92,11 @@
 % \usepackage{geometry}
 % \geometry{a4paper,left=2cm,right=2cm,top=2.5cm,bottom=1cm} %页边距
 
+
+
 \begin{document}
 
 \begin{abstract}
-
-A traditional bathtub cannot be reheated by itself, so users have to add hot water from time to time. Our goal is to establish a model of the temperature of bath water in space and time. Then we are expected to propose an optimal strategy for users to keep the temperature even and close to initial temperature and decrease water consumption.\cite{zhangrecommendation}
-
-To simplify modeling process, we firstly assume there is no person in the bathtub. We regard the whole bathtub as a thermodynamic system and introduce heat transfer formulas.\footnote{Test footnote}
-
-We establish two sub-models: adding water constantly and discontinuously. As for the former sub-model, we define the mean temperature of bath water. Introducing Newton cooling formula, we determine the heat transfer capacity. After deriving the value of parameters, we deduce formulas to derive results and simulate the change of temperature field via CFD. As for the second sub-model, we define an iteration consisting of two process: heating and standby. According to energy conservation law, we obtain the relationship of time and total heat dissipating capacity. Then we determine the mass flow and the time of adding hot water. We also use CFD to simulate the temperature field in second sub-model.
-
-In consideration of evaporation, we correct the results of sub-models referring to some scientists' studies. We define two evaluation criteria and compare the two sub-models. Adding water constantly is found to keep the temperature of bath water even and avoid wasting too much water, so it is recommended by us.
-
-Then we determine the influence of some factors: radiation heat transfer, the shape and volume of the tub, the shape/volume/temperature/motions of the person, the bubbles made from bubble bath additives. We focus on the influence of those factors to heat transfer and then conduct sensitivity analysis. The results indicate smaller bathtub with less surface area, lighter personal mass, less motions and more bubbles will decrease heat transfer and save water.
-
-Based on our model analysis and conclusions, we propose the optimal strategy for the user in a bathtub and explain the reason of uneven temperature throughout the bathtub. In addition, we make improvement for applying our model in real life.
 
 \begin{keywords}
 Heat transfer, Thermodynamic system, CFD, Energy conservation
@@ -127,64 +117,20 @@ Heat transfer, Thermodynamic system, CFD, Energy conservation
 
 \subsection{Background}
 
-Bathing in a tub is a perfect choice for those who have been worn out after a long day's working. A traditional bathtub is a simply water containment vessel without a secondary heating system or circulating jets. Thus the temperature of water in bathtub declines noticeably as time goes by, which will influent the experience of bathing. As a result, the bathing person needs to add a constant trickle of hot water from a faucet to reheat the bathing water. This way of bathing will result in waste of water because when the capacity of the bathtub is reached, excess water overflows the tub.
-
-An optimal bathing strategy is required for the person in a bathtub to get comfortable bathing experience while reducing the waste of water.
+1.1
 
 \subsection{Literature Review}
 
-Korean physicist Gi-Beum Kim analyzed heat loss through free surface of water contained in bathtub due to conduction and evaporation . He derived a relational equation based on the basic theory of heat transfer to evaluate the performance of bath tubes. The major heat loss was found to be due to evaporation. Moreover, he found out that the speed of heat loss depends more on the humidity of the bathroom than the temperature of water contained in the bathtub. So, it is best to maintain the temperature of bathtub water to be between 41 to 45$^{\circ}$C and the humidity of bathroom to be 95\%.
-
-When it comes to convective heat transfer in bathtub, many studies can be referred to. Newton's law of cooling states that the rate of heat loss of a body is proportional to the difference in temperatures between the body and its surroundings while under the effects of a breeze . Claude-Louis Navier and George Gabriel Stokes described the motion of viscous fluid substances with the Navier-Stokes equations. Those equations may be used to model the weather, ocean currents, water flow in a pipe and air flow around a wing .
-
-In addition, some numerical simulation software are applied in solving and analyzing problems that involve fluid flows. For example, Computational Fluid Dynamics (CFD) is a common one used to perform the calculations required to simulate the interaction of liquids and gases with surfaces defined by boundary conditions .
+1.2
 
 \subsection{Restatement of the Problem}
 
-We are required to establish a model to determine the change of water temperature in space and time. Then we are expected to propose the best strategy for the person in the bathtub to keep the water temperature close to initial temperature and even throughout the tub. Reduction of waste of water is also needed. In addition, we have to consider the impact of different conditions on our model, such as different shapes and volumes of the bathtub, etc.
-
-In order to solve those problems, we will proceed as follows:
-
-\begin{itemize}[leftmargin=*]
-\item {\bf Stating assumptions}. By stating our assumptions, we will narrow the focus of our approach towards the problems and provide some insight into bathtub water temperature issues.
-
-\item {\bf Making notations}. We will give some notations which are important for us to clarify our models.
-
-\item {\bf Presenting our model}. In order to investigate the problem deeper, we divide our model into two sub-models. One is a steady convection heat transfer sub-model in which hot water is added constantly. The other one is an unsteady convection heat transfer sub-model where hot water is added discontinuously.
-
-\item {Defining evaluation criteria and comparing sub-models}. We define two main criteria to evaluate our model: the mean temperature of bath water and the amount of inflow water.
-
-\item {\bf Analysis of influencing factors}. In term of the impact of different factors on our model, we take those into consideration: the shape and volume of the tub, the shape/volume/temperature of the person in the bathtub, the motions made by the person in the bathtub and adding a bubble bath additive initially.
-
-\item {\bf Model testing and sensitivity analysis}. With the criteria defined before, we evaluate the reliability of our model and do the sensitivity analysis.
-
-\item {\bf Further discussion}. We discuss about different ways to arrange inflow faucets. Then we improve our model to apply them in reality.
-
-\item {\bf Evaluating the model}. We discuss about the strengths and weaknesses of our model:
-
-\begin{itemize}[leftmargin=*]
-\item[1)] ... 
-\item[2)] ...
-\item[3)] ...
-\item[4)] ...
-\end{itemize}
-
-\end{itemize}
 
 \section{Assumptions and Justification}
 
 To simplify the problem and make it convenient for us to simulate real-life conditions, we make the following basic assumptions, each of which is properly justified.
 
 \begin{itemize}[leftmargin=*]
-\item {\bf The bath water is incompressible Non-Newtonian fluid}. The incompressible Non-Newtonian fluid is the basis of Navier–Stokes equations which are introduced to simulate the flow of bath water.
-
-\item {\bf All the physical properties of bath water, bathtub and air are assumed to be stable}. The change of those properties like specific heat, thermal conductivity and density is rather small according to some studies . It is complicated and unnecessary to consider these little change so we ignore them.
-
-\item {\bf There is no internal heat source in the system consisting of bathtub, hot water and air}. Before the person lies in the bathtub, no internal heat source exist except the system components. The circumstance where the person is in the bathtub will be investigated in our later discussion.
-
-\item {\bf We ignore radiative thermal exchange}. According to Stefan-Boltzmann’s law, the radiative thermal exchange can be ignored when the temperature is low. Refer to industrial standard , the temperature in bathroom is lower than 100 $^{\circ}$C, so it is reasonable for us to make this assumption.
-
-\item {\bf The temperature of the adding hot water from the faucet is stable}. This hypothesis can be easily achieved in reality and will simplify our process of solving the problem.
 \end{itemize}
 
 \section{Notations}
@@ -241,82 +187,136 @@ The whole modeling process can be shown as follows.
 \caption{Modeling process} \label{fig1}
 \end{figure}
 
-\section{Sub-model I : Adding Water Continuously}
 
-We first establish the sub-model based on the condition that a person add water continuously to reheat the bathing water. Then we use Computational Fluid Dynamics (CFD) to simulate the change of water temperature in the bathtub. At last, we evaluate the model with the criteria which have been defined before.
-
-\subsection{Model Establishment}
-
-Since we try to keep the temperature of the hot water in bathtub to be even, we have to derive the amount of inflow water and the energy dissipated by the hot water into the air.
-$$abc$$
-We derive the basic convection heat transfer control equations based on the former scientists’ achievement. Then, we define the mean temperature of bath water. Afterwards, we determine two types of heat transfer: the boundary heat transfer and the evaporation heat transfer. Combining thermodynamic formulas, we derive calculating results. Via Fluent software, we get simulation results.
-
-\subsubsection{Control Equations and Boundary Conditions}
-
-According to thermodynamics knowledge, we recall on basic convection
-heat transfer control equations in rectangular coordinate system. Those
-equations show the relationship of the temperature of the bathtub water in space.
-
-We assume the hot water in the bathtub as a cube. Then we put it into a
-rectangular coordinate system. The length, width, and height of it is $a,\, b$ and $c$.
-
-\begin{figure}[h] 
+\section{独立性检验}
+显然，在影响得分的因素中，选手能力是一个最主要的影响因素，在两两之间的对垒中，单次得分的概率分布取决于选手综合素质的差值. 
+但是否每次得分结果都是独立的二项分布，还是存在其他的影响因素影响比赛结果，这是我们需要检验的问题.
+具体地，我们考虑了两个方向的检验：
+(1) 发球优势是否影响得分结果
+(2) 之前的比赛结果是否影响得分结果
+To this end， 我们使用了卡方检验\footnote{卡方独立性检验是用于两个或两个以上因素多项分类的计数资料分析，即研究两类变量之间（以列联表形式呈现）的关联性和依存性，或相关性、独立性、交互作用性。}来验证相关性。
+考虑两个变量$X$和$Y$，他们的值域分别为$\{x_1,x_2,\cdots,x_m\}$和$\{y_1,y_2,\cdots,y_n\}$，我们可以得到一个列联表，如下所示：
+\begin{table}[h]
 \centering
-\includegraphics[width=8cm]{fig2.jpg}
-\caption{Modeling process} \label{fig2}
-\end{figure}
-
-In the basis of this, we introduce the following equations :
-
-\begin{itemize}[leftmargin=*]
-\item {\bf Continuity equation:}
+\caption{列联表}
+\label{tab1}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & $y_1$ & $y_2$ & $\cdots$ & $y_n$ \\ \hline
+$x_1$ & $n_{11}$ & $n_{12}$ & $\cdots$ & $n_{1n}$ \\ \hline
+$x_2$ & $n_{21}$ & $n_{22}$ & $\cdots$ & $n_{2n}$ \\ \hline
+$\vdots$ & $\vdots$ & $\vdots$ & $\ddots$ & $\vdots$ \\ \hline
+$x_m$ & $n_{m1}$ & $n_{m2}$ & $\cdots$ & $n_{mn}$ \\ \hline
+\end{tabular}
+\end{table}
+其中，$n_{ij}$表示当$X=x_i$时，$Y=y_j$的频数。我们可以得到如下的假设：
+\begin{itemize}
+\item $H_0$：$X$和$Y$是独立的
+\item $H_1$：$X$和$Y$不是独立的
 \end{itemize}
+我们可以使用卡方统计量来检验这个假设：
+\begin{equation*}
+\chi^2 = \sum_{i=1}^m\sum_{j=1}^n\frac{(n_{ij}-E_{ij})^2}{E_{ij}}
+\end{equation*}
+其中，$E_{ij}$是$X=x_i$和$Y=y_j$的期望频数, $chi^2$的值越大，我们越有理由拒绝$H_0$，即$X$和$Y$不是独立的。
 
-\begin{equation} \label{eq1}
-\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} +\frac{\partial w}{\partial z} =0
-\end{equation}
+\textbf{验证发球优势与得分的相关性} 
+    我们设置$X$为是否发球，$Y$ 为是否得分，然后使用卡方检验来验证发球优势是否影响得分结果。
+    我们分别使用了所有比赛数据的得分情况以及在每一场比赛的得分情况来进行检验，结果如图fig~\ref{}
+    fig~\ref{}.a 表示是否发球和是否得分的连列表，这里包含了每一场比赛的数据。我们可以看到，卡方统计量的值为1556.61，显著性p近似于，所以我们拒绝了$H_0$，即发球优势与得分结果是有相关性的。
+    fig~\ref{}.b 中进一步验证每一场比赛中发球优势与得分的相关性， 可见几乎每一场比赛的卡方统计量都是显著的。
 
-\noindent where the first component is the change of fluid mass along the $X$-ray. The second component is the change of fluid mass along the $Y$-ray. And the third component is the change of fluid mass along the $Z$-ray. The sum of the change in mass along those three directions is zero.
+\textbf{验证之前比赛结果与得分的相关性}
+    
+\textbf{\textit{去除发球的影响，动量与得分仍呈现出相关性}}
 
-\begin{itemize}[leftmargin=*]
-\item {\bf Moment differential equation (N-S equations):}
-\end{itemize}
 
-\begin{equation} \label{eq2}
-\left\{
-\begin{array}{l} \!\!
-\rho \Big(u \dfrac{\partial u}{\partial x} + v \dfrac{\partial u}{\partial y} + w\dfrac{\partial u}{\partial z} \Big) = -\dfrac{\partial p}{\partial x} + \eta \Big(\dfrac{\partial^2 u}{\partial x^2} + \dfrac{\partial^2 u}{\partial y^2} + \dfrac{\partial^2 u}{\partial z^2} \Big) \\[0.3cm]
-\rho \Big(u \dfrac{\partial v}{\partial x} + v \dfrac{\partial v}{\partial y} + w\dfrac{\partial v}{\partial z} \Big) = -\dfrac{\partial p}{\partial y} + \eta \Big(\dfrac{\partial^2 v}{\partial x^2} + \dfrac{\partial^2 v}{\partial y^2} + \dfrac{\partial^2 v}{\partial z^2} \Big) \\[0.3cm]
-\rho \Big(u \dfrac{\partial w}{\partial x} + v \dfrac{\partial w}{\partial y} + w\dfrac{\partial w}{\partial z} \Big) = -g-\dfrac{\partial p}{\partial z} + \eta \Big(\dfrac{\partial^2 w}{\partial x^2} + \dfrac{\partial^2 w}{\partial y^2} + \dfrac{\partial^2 w}{\partial z^2} \Big)  
-\end{array}
-\right.
-\end{equation}
 
-\begin{itemize}[leftmargin=*]
-\item {\bf Energy differential equation:}
-\end{itemize}
+\section{模型建立}
 
-\begin{equation} \label{eq3}
-\rho c_p \Big( u\frac{\partial t}{\partial x} + v\frac{\partial t}{\partial y} + w\frac{\partial t}{\partial z} \Big) = \lambda \Big(\frac{\partial^2 t}{\partial x^2} + \frac{\partial^2 t}{\partial y^2} + \frac{\partial^2 t}{\partial z^2} \Big)
-\end{equation}
+对于每一个point，我们使用胜率p来衡量选手的表现，即选手在此point下胜负结果服从参数为p的0-1分布，通过极大似然估计可以从已有数据得到真实分布的p，而极大似然等价于最小化KL散度，故可由此将KL散度发展为评估模型的指标，即观察我们建模出的p与真实p之间的差异。
 
-\noindent where the left three components are convection terms while the right three components are conduction terms.
 
-By Equation \eqref{eq3}, we have ......
 
-......
+\subsection{Model \uppercase\expandafter{\romannumeral1}: Bradley-Terry模型}
 
-On the right surface in Fig. \ref{fig2}, the water also transfers heat firstly with bathtub inner surfaces and then the heat comes into air. The boundary condition here is ......
+对于如何建模出p，由于此温网比赛为32强淘汰赛，32位选手共打了31场比赛，我们可以通过这31场比赛的结果来估计每位选手的p，我们使用Bradley-Terry模型来建模p。
 
-\subsubsection{Definition of the Mean Temperature}
 
-......
+\subsubsection{based Bradley-Terry模型}
 
-\subsubsection{Determination of Heat Transfer Capacity}
+设有 $n$ 个个体 $\{1,2, \cdots, n\}$ 进行两两比较, 将个体 $k$ 的能力参数记为 $\beta_k(k=1,2, \cdots, n), P_{k, j}$ 表示个体 $k$ 的能力优于个体 $j$ 的概率, B-T 模型将概率表示为
+\begin{equation*}
+P_{k, j}=\exp \left(\beta_k-\beta_j\right) /\left[1+\exp \left(\beta_k-\beta_j\right)\right],
+\end{equation*}
+$P_{k, j}$ 只依赖 $\beta_k$ 与 $\beta_j$ 之差.
+假设 $N_{k j}$ 表示个体 $k$ 和个体 $j$ 之间进行比较的总次数, 其中, 个体 $k$ 优于个体 $j$ 的次数为 $n_{k j}$, 个体 $j$ 优于个体 $k$ 的次数为 $n_{j k}=N_{k j}-n_{k j}$, 则关于个体能力参数 $\beta_k(k=1,2, \cdots, n)$ 的似然函数为
+\begin{equation*}
+L\left(\beta_1, \beta_2, \cdots, \beta_n\right)=\prod_{1 \leqslant k \neq j \leqslant n} \frac{N_{k j} !}{n_{k j} !\left(N_{k j}-n_{k j}\right) !}\left(\frac{\exp \left(\beta_k-\beta_j\right)}{1+\exp \left(\beta_k-\beta_j\right)}\right)^{n_{k j}}\left(\frac{1}{1+\exp \left(\beta_k-\beta_j\right)}\right)^{\left(N_{k j}-n_{k j}\right)} .
+\end{equation*}
 
-......
+考虑到模型的可识别性, 模型的约束条件为 $\sum_{k=1}^n \beta_k=0$, 或者某个 $\beta_k=0, k \in\{1,2, \cdots, n\}$.
 
-\section{Sub-model II: Adding Water Discontinuously}
+
+\subsubsection{Bradley-Terry模型 with 发球因素}
+
+在网球比赛中, $h$ 表示发球方, $v$ 表示接球方, 在第 $i$ 场比赛中, 只有胜、负两种比赛结果, 若发球方胜,记为 $Y_i=1$, 否则为 $Y_i=0$. 如果考虑主场因素, 需要把所有球队主场参数 $\delta$ 加人到 B-T 模型 (1) 中, 模型为
+\begin{equation*}
+P\left(Y_i=1\right)=\exp \left(\delta+\beta_{h_i}-\beta_{v_i}\right) /\left[1+\exp \left(\delta+\beta_{h_i}-\beta_{v_i}\right)\right] .
+\end{equation*}
+
+对模型参数极大似然估计时, 似然函数式 (2) 也作相应的修改.
+
+
+
+
+\subsection{Model \uppercase\expandafter{\romannumeral2}: 动态 B-T 模型}
+
+\subsubsection{ 基于马尔可夫过程的动态 B-T 模型}
+
+
+
+
+\subsubsection{ 基于 EWMA 过程的动态 B-T 模型}
+
+在赛季期间, 由于球员会受到伤病、心理、疲劳等各种因素影响, 球队比赛的实力会发生变化, 因此考虑在 $\mathrm{B}-\mathrm{T}$ 模型中引人 EWMA 过程, 动态评估各支球队的实力.
+设 $\beta_{h_i}\left(t_i\right)$ 表示 $t_i$ 时间第 $i$ 场比赛主队 $h_i$ 的实力, 通过 EWMA 过程可得
+\begin{equation*}
+\beta_{h_i}\left(t_i\right)=\alpha_1 \lambda_1 r_{h_i}\left(t_i^{(-1)}\right)+\left(1-\lambda_1\right) \beta_{h_i}\left(t_i^{(-1)}\right) .
+\end{equation*}
+
+其中, $\alpha_1$ 是主场参数, $\lambda_1 \in[0,1]$ 是主场平滑参数, $r_{h_1}\left(t_i^{(-1)}\right)$ 是主队 $h_i$ 在时间 $t_i^{(-1)}$ 时比赛结果变量.
+此外用式 4) 计算时需要一个迭代计算的初始值, 记为 $\alpha_1 \bar{r}_h$, 其中, $\bar{r}_h$ 可以取主队之前比赛结果的平均值. 假设主场球队 $h_i$ 在时间 $t_i$ 时已进行了 $K$ 场主场比赛, 由式 (4) 可得
+\begin{equation*}
+\beta_{h_i}\left(t_i\right)=\alpha_1\left\{\lambda_1 \sum_{k=0}^{K-1}\left(1-\lambda_1\right)^k r_{h_i}\left(t_i^{(-k-1)}\right)+\left(1-\lambda_1\right)^K \bar{r}_h\right\}=\alpha_1 x_{h_i}\left(t_i ; \lambda_1\right) .
+\end{equation*}
+
+因此, $\beta_{h_i}\left(t_i\right)$ 表示主队之前全部比赛结果 $r_{h_i}\left(t_i^{(-1)}\right), r_{h_i}\left(t_i^{(-2)}\right), \cdots, r_{h_i}\left(t_i^{(-K)}\right)$ 的函数.
+同理, 客场实力 $\beta_{v_i}\left(t_i\right)$ 可表示为
+\begin{equation*}
+\beta_{v_i}\left(t_i\right)=\alpha_2\left\{\lambda_1 \sum_{k=0}^{K-1}\left(1-\lambda_2\right)^k r_{v_i}\left(t_i^{(-k-1)}\right)+\left(1-\lambda_2\right)^K \bar{r}_v\right\}=\alpha_2 x_{v_i}\left(t_i ; \lambda_2\right) .
+\end{equation*}
+
+再将式 (5) 和式 (6) 代人式 (3), 模型改为
+\begin{equation*}
+P\left(Y_i=y_i \mid Y_{i-1}=y_{i-1}, \cdots, Y_1=y_1\right)=\frac{\exp \left\{\delta_{y_i}+\beta_{h_i}\left(t_i\right)-\beta_{v_i}\left(t_i\right)\right.}{1+\exp \left\{\delta_{y_i}+\beta_{h_i}\left(t_i\right)-\beta_{v_i}\left(t_i\right)\right\}} .
+\end{equation*}
+
+称为动态的 $\mathrm{B}-\mathrm{T}$ 模型.
+设模型的迭代参数为 $\gamma=\left(\alpha_1, \alpha_2, \delta\right)^{\mathrm{T}}$, 平滑参数为 $\lambda=\left(\lambda_1, \lambda_2\right)^{\mathrm{T}}$, 记 $\theta=\left(\gamma^{\mathrm{T}}, \lambda^{\mathrm{T}}\right)^{\mathrm{T}}$, 相应地, 式 (7) 表示为
+\begin{equation*}
+P\left(Y_i=y_i \mid Y_{i-1}=y_{i-1}, \cdots, Y_1=y_1 ; \theta\right)=\frac{\exp \left\{\delta_{y_i}+\alpha_1 x_{h_i}\left(t_i ; \lambda_1\right)-\alpha_2 x_{v_i}\left(t_i ; \lambda_2\right)\right\}}{1+\exp \left\{\delta_{y_i}+\alpha_1 x_{h_i}\left(t_i ; \lambda_1\right)-\alpha_2 x_{v_i}\left(t_i ; \lambda_2\right)\right\}} .
+\end{equation*}
+
+模型参数的似然函数为
+\begin{equation*}
+L(\theta ; y)=P\left(Y_1=y_1 ; \theta\right) \prod_{i=2}^n P\left(Y_i=y_i \mid Y_{i-1}=y_{i-1}, \cdots, Y_1=y_1 ; \theta\right) .
+\end{equation*}
+
+
+
+
+\section{Sub-model II: }
 
 In order to establish the unsteady sub-model, we recall on the working principle of air conditioners. The heating performance of air conditions consist of two processes: heating and standby. After the user set a temperature, the air conditioner will begin to heat until the expected temperature is reached. Then it will go standby. When the temperature get below the expected temperature, the air conditioner begin to work again. As it works in this circle, the temperature remains the expected one.
 
@@ -493,6 +493,8 @@ Our before discussion is based on ideal assumptions. In reality, we have to make
 
 \bibliographystyle{unsrt}
 \bibliography{reference}
+
+
 \newpage
 
 \begin{letter}{Enjoy Your Bath Time!}
